@@ -14,6 +14,19 @@ async function getUserByEmail(email) {
   }
 }
 
+async function getUserByUID(uid) {
+  try {
+    if (!uid || typeof uid != "string") {
+      throw "email not vaild";
+    }
+    let userCollection = await users();
+    let user = await userCollection.findOne({ uid: uid });
+    return user;
+  } catch (e) {
+    throw e;
+  }
+}
+
 const createUserWithEmail = async (email, password) => {
   try {
     const user = await firebase.createUserWithEmailAndPassword(email, password);
@@ -48,8 +61,10 @@ const authenticateUserWithEmailAndPassword = async (email, password) => {
     throw e;
   }
 };
+
 module.exports = {
   getUserByEmail,
   createUserWithEmail,
-  authenticateUserWithEmailAndPassword
+  authenticateUserWithEmailAndPassword,
+  getUserByUID
 };

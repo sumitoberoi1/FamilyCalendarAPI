@@ -26,7 +26,28 @@ const getFamilyWithCode = async code => {
   }
 };
 
+const joinFamily = async (code, user) => {
+  try {
+    if (!code || typeof code != "string") {
+      throw "Code not vaild";
+    }
+    const existingFamily = await getFamilyWithCode(code);
+    let members = existingFamily.members;
+    const isMember = members.includes(member => member.uid === user.uid);
+    if (isMember) {
+      throw new Error("you are already a member of this family");
+    } else {
+      members.push(user);
+      existingFamily.members = members;
+      return existingFamily;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
 module.exports = {
   createFamilyWithNameAndCode,
-  getFamilyWithCode
+  getFamilyWithCode,
+  joinFamily
 };

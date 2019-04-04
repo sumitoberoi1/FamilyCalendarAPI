@@ -31,16 +31,23 @@ const joinFamily = async (code, user) => {
     if (!code || typeof code != "string") {
       throw "Code not vaild";
     }
-    const existingFamily = await getFamilyWithCode(code);
-    let members = existingFamily.members;
-    const isMember = members.includes(member => member.uid === user.uid);
-    if (isMember) {
-      throw new Error("you are already a member of this family");
+    const familyCollection = await family();
+    const presentFamily = await getFamilyWithCode(code);
+    const isMember =
+      presentFamily.members.filter(
+        member => String(member._id) === String(user._id)
+      ).length > 0;
+    if (!isMember) {
+      const updatedFamily = await familyCollection.updateOne(
+        { code: code },
+        {
+          $push: { members: user }
+        }
+      );
     } else {
-      members.push(user);
-      existingFamily.members = members;
-      return existingFamily;
+      throw "Member already exist";
     }
+    return await getFamilyWithCode(code);
   } catch (e) {
     throw e;
   }

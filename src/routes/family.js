@@ -19,7 +19,7 @@ router.post("/createFamily", async (req, res) => {
           user
         );
         res.status = 200;
-        res.json({ newfamily });
+        res.json({ family: newfamily });
       }
     } else {
       res.sendStatus(404);
@@ -35,19 +35,12 @@ router.post("/joinFamily", async (req, res) => {
   try {
     let user = await userData.getUserByUID(uid);
     if (user) {
-      let family = await familyData.getFamilyWithCode(code);
-      if (family) {
-        error_message = "Family With Code already exist";
-        res.status = 409;
-        res.json({ error: error_message });
+      let existingFamily = await familyData.getFamilyWithCode(code);
+      if (existingFamily) {
+        existingFamily = await familyData.joinFamily(code, user);
+        res.json({ family: existingFamily });
       } else {
-        let newfamily = await familyData.createFamilyWithNameAndCode(
-          code,
-          name,
-          user
-        );
-        res.status = 200;
-        res.json({ newfamily });
+        res.sendStatus(404);
       }
     } else {
       res.sendStatus(404);

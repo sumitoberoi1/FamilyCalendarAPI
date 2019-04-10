@@ -8,7 +8,7 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 configRoutes(app);
-app.listen(3000, () => {
+app.listen(3001, () => {
   firebase.initializeFirebase();
   console.log(
     "Your server is now listening on port 3000! Navigate to http://localhost:3000 to access it"

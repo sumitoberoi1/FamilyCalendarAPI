@@ -3,7 +3,7 @@ const userData = require("../data/user");
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, isAdult } = req.body;
   try {
     let user = await userData.getUserByEmail(email);
     if (user) {
@@ -11,7 +11,7 @@ router.post("/register", async (req, res) => {
       res.status = 409;
       res.json({ error: error_message });
     } else {
-      let user = await userData.createUserWithEmail(email, password);
+      let user = await userData.createUserWithEmail(email, password, isAdult);
       res.status = 200;
       res.json({ user });
     }

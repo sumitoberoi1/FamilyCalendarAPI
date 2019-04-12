@@ -1,11 +1,15 @@
 const mongoCollections = require("../../config/mongoCollections");
 const family = mongoCollections.family;
-const userData = require("./user");
 const createFamilyWithNameAndCode = async (code, name, creater) => {
   try {
     const familyCollection = await family();
     const members = [creater];
-    const mongofamily = { code: code, name: name, members: members };
+    const mongofamily = {
+      code: code,
+      name: name,
+      members: members,
+      creater: creater
+    };
     await familyCollection.insertOne(mongofamily);
     return await getFamilyWithCode(code);
   } catch (e) {
@@ -25,6 +29,12 @@ const getFamilyWithCode = async code => {
     throw e;
   }
 };
+
+// const getFamilyWithID = async id => {
+
+// }
+
+const inviteMember = (email, family) => {};
 
 const joinFamily = async (code, user) => {
   try {

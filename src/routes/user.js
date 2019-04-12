@@ -13,7 +13,7 @@ router.post("/register", async (req, res) => {
     } else {
       let user = await userData.createUserWithEmail(email, password, isAdult);
       res.status = 200;
-      res.json({ user });
+      res.json(user);
     }
   } catch (e) {
     res.status = 404;
@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
       password
     );
     res.status = 200;
-    res.json({ user });
+    res.json(user);
   } catch (e) {
     res.status = 404;
     res.json({ error: e });

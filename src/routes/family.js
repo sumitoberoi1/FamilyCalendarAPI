@@ -2,7 +2,7 @@ const express = require("express");
 const userData = require("../data/user");
 const familyData = require("../data/family");
 const router = express.Router();
-router.post("/createFamily", async (req, res) => {
+router.post("/", async (req, res) => {
   const { code, name, uid } = req.body;
   try {
     let user = await userData.getUserByUID(uid);
@@ -19,7 +19,7 @@ router.post("/createFamily", async (req, res) => {
           user
         );
         res.status = 200;
-        res.json({ family: newfamily });
+        res.json(newfamily);
       }
     } else {
       res.sendStatus(404);
@@ -30,7 +30,29 @@ router.post("/createFamily", async (req, res) => {
     return;
   }
 });
-router.post("/joinFamily", async (req, res) => {
+
+router.post("/invite", async (req, res) => {
+  const { email, uid, code } = req.body;
+  try {
+    let user = await userData.getUserByUID(uid);
+    if (user) {
+      let family = await familyData.getFamilyWithCode(code);
+      if (family) {
+      } else {
+        res.status = 404;
+        res.json({ error: "Family not found" });
+      }
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (e) {
+    res.status = 404;
+    res.json({ error: e });
+    return;
+  }
+});
+
+router.post("/join", async (req, res) => {
   const { code, uid } = req.body;
   try {
     let user = await userData.getUserByUID(uid);
@@ -38,7 +60,7 @@ router.post("/joinFamily", async (req, res) => {
       let existingFamily = await familyData.getFamilyWithCode(code);
       if (existingFamily) {
         existingFamily = await familyData.joinFamily(code, user);
-        res.json({ family: existingFamily });
+        res.json(existingFamily);
       } else {
         res.sendStatus(404);
       }
@@ -50,6 +72,10 @@ router.post("/joinFamily", async (req, res) => {
     res.json({ error: e });
     return;
   }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params.id;
 });
 
 module.exports = router;

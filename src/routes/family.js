@@ -57,8 +57,8 @@ router.post("/join", async (req, res) => {
       let existingFamily = await familyData.getFamilyWithCode(code);
       if (existingFamily) {
         existingFamily = await familyData.joinFamily(code, user);
-        let user = await userData.addFamily(uid, existingFamily);
-        res.json(user);
+        const updatedUser = await userData.addFamily(uid, existingFamily);
+        res.json(updatedUser);
       } else {
         res.sendStatus(404);
       }

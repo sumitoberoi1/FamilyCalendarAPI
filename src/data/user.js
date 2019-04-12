@@ -50,6 +50,7 @@ const createUserWithEmail = async (email, password, isAdult) => {
 };
 
 const addFamily = async (uid, family) => {
+  const userCollection = await users();
   await userCollection.findOneAndUpdate(
     { uid: uid },
     {

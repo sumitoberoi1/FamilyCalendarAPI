@@ -10,24 +10,22 @@ router.post("/", async (req, res) => {
       let family = await familyData.getFamilyWithCode(code);
       if (family) {
         error_message = "Family With Code already exist";
-        res.status = 409;
-        res.json({ error: error_message });
+        res.status(409).send({ error: error_message });
       } else {
         let newfamily = await familyData.createFamilyWithNameAndCode(
           code,
           name,
           user
         );
-        let user = await userData.addFamily(uid, newfamily);
+        let updatedUser = await userData.addFamily(uid, newfamily);
         res.status = 200;
-        res.json(user);
+        res.json(updatedUser);
       }
     } else {
       res.sendStatus(404);
     }
   } catch (e) {
     res.status(404).send({ error: e });
-    return;
   }
 });
 

@@ -18,15 +18,15 @@ router.post("/", async (req, res) => {
           name,
           user
         );
+        let user = await userData.addFamily(uid, newfamily);
         res.status = 200;
-        res.json(newfamily);
+        res.json(user);
       }
     } else {
       res.sendStatus(404);
     }
   } catch (e) {
-    res.status = 404;
-    res.json({ error: e });
+    res.status(404).send({ error: e });
     return;
   }
 });
@@ -46,8 +46,7 @@ router.post("/invite", async (req, res) => {
       res.sendStatus(404);
     }
   } catch (e) {
-    res.status = 404;
-    res.json({ error: e });
+    res.status(404).send({ error: e });
     return;
   }
 });
@@ -60,7 +59,8 @@ router.post("/join", async (req, res) => {
       let existingFamily = await familyData.getFamilyWithCode(code);
       if (existingFamily) {
         existingFamily = await familyData.joinFamily(code, user);
-        res.json(existingFamily);
+        let user = await userData.addFamily(uid, existingFamily);
+        res.json(user);
       } else {
         res.sendStatus(404);
       }
@@ -68,8 +68,7 @@ router.post("/join", async (req, res) => {
       res.sendStatus(404);
     }
   } catch (e) {
-    res.status = 404;
-    res.json({ error: e });
+    res.status(404).send({ error: e });
     return;
   }
 });

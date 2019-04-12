@@ -26,8 +26,7 @@ router.post("/", async (req, res) => {
     );
     res.json(task);
   } else {
-    res.status = 404;
-    res.json({ error: e });
+    res.status(404).json({ error: e });
     return;
   }
 });

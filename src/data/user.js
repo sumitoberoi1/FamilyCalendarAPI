@@ -36,7 +36,8 @@ const createUserWithEmail = async (email, password, isAdult) => {
         uid: user.user.uid,
         email: user.user.email,
         color: getRandomColor(),
-        isAdult: isAdult
+        isAdult: isAdult,
+        family: null
       };
       await userCollection.insertOne(saveUser);
       return await getUserByEmail(user.user.email);
@@ -46,6 +47,18 @@ const createUserWithEmail = async (email, password, isAdult) => {
   } catch (e) {
     throw e;
   }
+};
+
+const addFamily = async (uid, family) => {
+  await userCollection.findOneAndUpdate(
+    { uid: uid },
+    {
+      $set: {
+        family: family
+      }
+    }
+  );
+  return await getUserByUID(uid);
 };
 
 const authenticateUserWithEmailAndPassword = async (email, password) => {
@@ -80,5 +93,6 @@ module.exports = {
   getUserByEmail,
   createUserWithEmail,
   authenticateUserWithEmailAndPassword,
-  getUserByUID
+  getUserByUID,
+  addFamily
 };

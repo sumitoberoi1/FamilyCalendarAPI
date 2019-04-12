@@ -16,8 +16,7 @@ router.post("/register", async (req, res) => {
       res.json(user);
     }
   } catch (e) {
-    res.status = 404;
-    res.json({ error: e });
+    res.status(404).json({ error: e });
     return;
   }
 });
@@ -32,8 +31,19 @@ router.post("/login", async (req, res) => {
     res.status = 200;
     res.json(user);
   } catch (e) {
-    res.status = 404;
-    res.json({ error: e });
+    res.status(404).send({ error: e });
+    return;
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const uid = req.params.id;
+  try {
+    let user = await userData.getUserByUID(uid);
+    res.status = 200;
+    res.json(user);
+  } catch (e) {
+    res.status(404).send({ error: e });
     return;
   }
 });

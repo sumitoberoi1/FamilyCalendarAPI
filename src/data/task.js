@@ -6,9 +6,9 @@ const createTask = async (
   taskName,
   taskDescription,
   taskLocation,
-  taskNotes,
-  isChildSafe,
-  taskDate
+  isParentalControlled,
+  taskDate,
+  family
 ) => {
   try {
     const taskCollection = await tasks();
@@ -17,12 +17,12 @@ const createTask = async (
       taskName,
       taskDescription,
       taskLocation,
-      taskNotes,
-      isChildSafe,
-      taskDate
+      isParentalControlled,
+      taskDate,
+      family
     };
-    const task = await taskCollection.insertOne(saveTask);
-    return await taskCollection.findOne({ _id: task.insertedId });
+    const { insertedId } = await taskCollection.insertOne(saveTask);
+    return await taskCollection.findOne({ _id: insertedId });
   } catch (e) {
     throw e;
   }

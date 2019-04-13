@@ -1,6 +1,7 @@
 const express = require("express");
 const userData = require("../data/user");
 const taskData = require("../data/task");
+const familyData = require("../data/family");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -9,24 +10,25 @@ router.post("/", async (req, res) => {
     name,
     description,
     location,
-    notes,
     isParentalControlled,
-    taskDate
+    taskDate,
+    familyCode
   } = req.body;
   const user = await userData.getUserByUID(uid);
+  const family = await familyData.getFamilyWithCode(familyCode);
   if (user) {
     const task = await taskData.createTask(
       user,
       name,
       description,
       location,
-      notes,
       isParentalControlled,
-      taskDate
+      taskDate,
+      family
     );
     res.json(task);
   } else {
-    res.status(404).json({ error: e });
+    res.status(404).send({ error: e });
     return;
   }
 });

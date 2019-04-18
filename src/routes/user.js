@@ -16,7 +16,7 @@ router.post("/register", async (req, res) => {
       res.json(user);
     }
   } catch (e) {
-    res.status(404).json({ error: e });
+    res.status(404).send({ error: e });
     return;
   }
 });
